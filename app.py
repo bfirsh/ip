@@ -24,7 +24,10 @@ def index():
             d['hostv6'] = socket.gethostbyaddr(d['ipv6'])[0],
         except:
             pass
-    return jsonify(**d)
+    res = jsonify(**d)
+    if request.args.get('callback', ''):
+        res.data = '%s(%s)' % (request.args['callback'], res.data)
+    return res
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
